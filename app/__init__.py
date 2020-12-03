@@ -7,7 +7,7 @@ from collections import defaultdict
 from termcolor import colored
 from prompt_toolkit import prompt
 
-from client import Client
+from app.client import Client
 
 colorama.init()
 
@@ -117,7 +117,3 @@ def search(days: int, tags: str, show_id: bool):
 def delete(id_: str):
     if client.delete(id_):
         print(f"Message {id_} was deleted")
-
-
-if __name__ == "__main__":
-    cli()

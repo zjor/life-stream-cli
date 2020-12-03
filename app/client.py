@@ -3,7 +3,7 @@ import requests as rq
 import datetime as dt
 from typing import Optional
 
-from config import Config
+from app.config import Config
 
 
 class Client:
