@@ -7,7 +7,7 @@ from collections import defaultdict
 from termcolor import colored
 from prompt_toolkit import prompt
 
-from app.client import Client
+from life_stream_cli.client import Client
 
 colorama.init()
 
@@ -17,6 +17,8 @@ REMOTE_HOST = "http://api.lifestream.176.102.64.189.xip.io"
 LOCAL_HOST = "http://localhost:8080"
 
 host = REMOTE_HOST
+
+
 # host = LOCAL_HOST
 
 

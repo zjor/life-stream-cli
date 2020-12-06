@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "life-stream-cli"
-version = "0.1.0"
+version = "0.1.1"
 description = "A client for the Life Stream service"
 authors = ["Sergey Royz <zjor.se@gmail.com>"]
 license = "MIT"
@@ -18,3 +18,6 @@ prompt-toolkit = "^3.0.8"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+lst = "life_stream_cli:cli"

@@ -3,7 +3,7 @@ import requests as rq
 import datetime as dt
 from typing import Optional
 
-from app.config import Config
+from life_stream_cli.config import Config
 
 
 class Client:

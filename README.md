@@ -2,5 +2,5 @@
 
 ## How to distribute
 
-1. `python setup.py sdist`
+1. `python -m pep517.build .`
 2. `twine upload dist/*`
