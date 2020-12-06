@@ -8,6 +8,7 @@ from termcolor import colored
 from prompt_toolkit import prompt
 
 from life_stream_cli.client import Client
+from life_stream_cli.config import Config
 
 colorama.init()
 
@@ -23,7 +24,7 @@ host = REMOTE_HOST
 
 
 def do_login(client) -> bool:
-    print("Please login first")
+    print("Please login or register first")
     email = input("Email: ")
     password = getpass.getpass()
     shard_id = client.login(email, password)
@@ -78,6 +79,9 @@ client = Client(host)
 @click.group(invoke_without_command=True)
 @click.pass_context
 def cli(ctx):
+    config = Config()
+    if not config.shard_id_exists():
+        do_login(client)
     if ctx.invoked_subcommand is None:
         search(["-n 7"])
 

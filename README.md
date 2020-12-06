@@ -4,3 +4,4 @@
 
 1. `python -m pep517.build .`
 2. `twine upload dist/*`
+3. `pip install life-stream-cli`
