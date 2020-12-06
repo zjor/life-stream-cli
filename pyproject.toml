@@ -2,7 +2,7 @@
 name = "life-stream-cli"
 version = "0.1.0"
 description = "A client for the Life Stream service"
-authors = ["Sergey Royz <sergey@ext.latch.com>"]
+authors = ["Sergey Royz <zjor.se@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
