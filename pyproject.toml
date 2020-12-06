@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "life-stream-cli"
+version = "0.1.0"
+description = "A client for the Life Stream service"
+authors = ["Sergey Royz <sergey@ext.latch.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "^2.25.0"
+click = "^7.1.2"
+colorama = "^0.4.4"
+termcolor = "^1.1.0"
+prompt-toolkit = "^3.0.8"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
