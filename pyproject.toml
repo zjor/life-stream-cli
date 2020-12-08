@@ -4,6 +4,9 @@ version = "0.2.0"
 description = "A client for the Life Stream service"
 authors = ["Sergey Royz <zjor.se@gmail.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/zjor/life-stream-cli"
+repository = "https://github.com/zjor/life-stream-cli"
 
 [tool.poetry.dependencies]
 python = "^3.8"
