@@ -89,9 +89,12 @@ def cli(ctx):
 
 
 @cli.command()
-@click.option("--set", "name", type=str)
-def config(name):
-    config_command(name)
+@click.option("--set", "set_name", required=False, type=str)
+@click.option("--get", "get_name", required=False, type=str)
+@click.option("--unset", "unset_name", required=False, type=str)
+@click.option("--reset", "reset", is_flag=True)
+def config(set_name, get_name, unset_name, reset):
+    config_command(set_name, get_name, unset_name, reset)
 
 
 @cli.command()
