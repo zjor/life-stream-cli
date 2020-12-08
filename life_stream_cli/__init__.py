@@ -11,6 +11,8 @@ from life_stream_cli.client import Client
 from life_stream_cli.config import Config
 
 from life_stream_cli.subcommands.config import config_command
+from life_stream_cli.subcommands.config.config_utils import get_endpoint
+from life_stream_cli.subcommands.config.credentials_utils import load_credentials, store_credentials, Credentials
 
 colorama.init()
 
@@ -40,7 +42,7 @@ def do_login(client) -> bool:
             print("Success!")
     else:
         print("Success!")
-    client.config.store_shard_id(shard_id)
+    store_credentials(Credentials(email, shard_id))
     return True
 
 
@@ -75,15 +77,19 @@ def format_entries(entries, show_id=False):
     return grouped
 
 
-client = Client(host)
+client = Client(get_endpoint(), None)
 
 
 @click.group(invoke_without_command=True)
 @click.pass_context
 def cli(ctx):
-    config = Config()
-    if not config.shard_id_exists():
-        do_login(client)
+    endpoint = get_endpoint()
+    credentials = load_credentials()
+    if not credentials:
+        do_login(Client(endpoint, None))
+    else:
+        global client
+        client = Client(endpoint, credentials.shard_id)
     if ctx.invoked_subcommand is None:
         search(["-n 7"])
 

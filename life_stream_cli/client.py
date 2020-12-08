@@ -3,13 +3,11 @@ import requests as rq
 import datetime as dt
 from typing import Optional
 
-from life_stream_cli.config import Config
-
 
 class Client:
-    def __init__(self, base_uri):
+    def __init__(self, base_uri, shard_id):
         self.base_uri = base_uri
-        self.config = Config()
+        self.shard_id = shard_id
 
     def login(self, email, password) -> Optional[str]:
         response = rq.post(f"{self.base_uri}/api/auth/login", json={
@@ -37,11 +35,7 @@ class Client:
             return None
 
     def _get_headers(self):
-        shard_id = self.config.get_shard_id()
-        if not shard_id:
-            raise Exception("shard_id was not found, please authenticate")
-
-        return {"X-ShardId": shard_id}
+        return {"X-ShardId": self.shard_id}
 
     def save(self, message):
         response = rq.post(
