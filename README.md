@@ -11,3 +11,7 @@ If you want to forget something, simply put it down.
 1. `python -m pep517.build .`
 2. `twine upload dist/*`
 3. `pip install life-stream-cli`
+
+## Useful tips
+
+- (Development) Switching between profiles `lst config --set active-profile=default`
