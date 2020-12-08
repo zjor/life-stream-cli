@@ -10,6 +10,8 @@ from prompt_toolkit import prompt
 from life_stream_cli.client import Client
 from life_stream_cli.config import Config
 
+from life_stream_cli.subcommands.config import config_command
+
 colorama.init()
 
 logging.basicConfig(level=logging.INFO)
@@ -84,6 +86,12 @@ def cli(ctx):
         do_login(client)
     if ctx.invoked_subcommand is None:
         search(["-n 7"])
+
+
+@cli.command()
+@click.option("--set", "name", type=str)
+def config(name):
+    config_command(name)
 
 
 @cli.command()
