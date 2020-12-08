@@ -20,7 +20,7 @@ default_config = {
 }
 
 
-def ensure_dir(dir_name):
+def ensure_dir(dir_name=DIR_NAME):
     path = Path(str(Path.home()) + f"/{dir_name}")
     if not path.exists():
         path.mkdir()
@@ -90,26 +90,17 @@ def reset_config():
     store_config(default_config, filename)
 
 
-def config_command(set_name):
-    print(f"setting: {set_name}")
-    config = load_config()
-    print(config)
-
-
-def get_endpoint():
+def get_active_profile():
     active_profile = get_param("active-profile")
     if not active_profile:
         raise Exception("active-profile is not set")
+    return active_profile
+
+
+def get_endpoint():
+    active_profile = get_active_profile()
     key = f"profiles.{active_profile}.endpoint"
     endpoint = get_param(key)
     if not endpoint:
         raise Exception(f"Endpoint is not set for the key: {key}")
     return endpoint
-
-
-if __name__ == "__main__":
-    # reset_config()
-    # set_param("user.email", "Alice")
-    # print(get_param("user.email"))
-    set_param("active-profile", "default")
-    print(get_endpoint())
