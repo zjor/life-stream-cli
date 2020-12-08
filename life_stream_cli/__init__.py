@@ -11,7 +11,7 @@ from life_stream_cli.client import Client
 from life_stream_cli.config import Config
 
 from life_stream_cli.subcommands.config import config_command
-from life_stream_cli.subcommands.config.config_utils import get_endpoint
+from life_stream_cli.subcommands.config.config_utils import get_endpoint, get_active_profile
 from life_stream_cli.subcommands.config.credentials_utils import load_credentials, store_credentials, Credentials
 
 colorama.init()
@@ -83,12 +83,14 @@ client = Client(get_endpoint(), None)
 @click.group(invoke_without_command=True)
 @click.pass_context
 def cli(ctx):
+    global client
     endpoint = get_endpoint()
     credentials = load_credentials()
     if not credentials:
-        do_login(Client(endpoint, None))
+        if do_login(Client(endpoint, None)):
+            credentials = load_credentials()
+            client = Client(endpoint, credentials.shard_id)
     else:
-        global client
         client = Client(endpoint, credentials.shard_id)
     if ctx.invoked_subcommand is None:
         search(["-n 7"])
@@ -140,3 +142,12 @@ def search(days: int, tags: str, show_id: bool):
 def delete(id_: str):
     if client.delete(id_):
         print(f"Message {id_} was deleted")
+
+
+@cli.command()
+def whoami():
+    active_profile = get_active_profile()
+    endpoint = get_endpoint()
+    credentials = load_credentials()
+    email = credentials.email if credentials else "not authorized"
+    print(f"Profile: {active_profile}\nEndpoint: {endpoint}\nEmail: {email}")
