@@ -60,11 +60,56 @@ def set_param(key, value):
     store_config(config, filename)
 
 
+def unset_param(key):
+    key_path = key.split(".")
+    config, filename = load_config()
+    params = config["params"]
+    while len(key_path) > 1:
+        if not key_path[0] in params:
+            params[key_path[0]] = {}
+        params = params[key_path[0]]
+        key_path = key_path[1:]
+    params.pop(key_path[0], None)
+    store_config(config, filename)
+
+
+def get_param(key):
+    key_path = key.split(".")
+    config, filename = load_config()
+    params = config["params"]
+    while len(key_path) > 1:
+        if not key_path[0] in params:
+            params[key_path[0]] = {}
+        params = params[key_path[0]]
+        key_path = key_path[1:]
+    return params[key_path[0]] if key_path[0] in params else None
+
+
+def reset_config():
+    _, filename = load_config()
+    store_config(default_config, filename)
+
+
 def config_command(set_name):
     print(f"setting: {set_name}")
     config = load_config()
     print(config)
 
 
+def get_endpoint():
+    active_profile = get_param("active-profile")
+    if not active_profile:
+        raise Exception("active-profile is not set")
+    key = f"profiles.{active_profile}.endpoint"
+    endpoint = get_param(key)
+    if not endpoint:
+        raise Exception(f"Endpoint is not set for the key: {key}")
+    return endpoint
+
+
 if __name__ == "__main__":
-    set_param("active-profile", "local")
+    # reset_config()
+    # set_param("user.email", "Alice")
+    # print(get_param("user.email"))
+    set_param("active-profile", "default")
+    print(get_endpoint())
