@@ -121,8 +121,9 @@ def login():
 
 @click.argument('words', nargs=-1)
 @click.option('-f', '--filename', help="Takes record content from the file")
+@click.option('--date', 'date_', type=str, help="Specifies creation date in format YYYY-mm-dd")
 @cli.command(help="Creates a new record")
-def save(words, filename):
+def save(words, filename, date_):
     if filename:
         with open(filename, "r") as f_:
             content_ = f_.read().strip()
@@ -131,7 +132,13 @@ def save(words, filename):
             content_ = prompt("> ", vi_mode=True, multiline=True)
         else:
             content_ = " ".join(words)
-    print(client.save(content_))
+
+    created_at = None
+    if date_:
+        created_at = int((dt.datetime.strptime(date_, "%Y-%m-%d") - dt.datetime.utcfromtimestamp(0))
+                         .total_seconds() * 1000)
+
+    print(client.save(content_, created_at))
 
 
 @click.option('--id', 'id_', required=True, type=str, help="Record ID to be updated")
