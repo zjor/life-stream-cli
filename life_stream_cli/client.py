@@ -44,6 +44,13 @@ class Client:
             json={"payload": message})
         return response.json()
 
+    def update(self, id_, message):
+        response = rq.post(
+            f"{self.base_uri}/api/stream/id/{id_}",
+            headers=self._get_headers(),
+            json={"payload": message})
+        return response.json()
+
     def fetch(self, days=-1, tags=None):
         args = ""
         if days and days > -1:

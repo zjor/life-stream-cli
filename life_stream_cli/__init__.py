@@ -111,7 +111,7 @@ def login():
 
 
 @click.argument('words', nargs=-1)
-@click.option('-f', '--filename')
+@click.option('-f', '--filename', help="Takes record content from the file")
 @cli.command(help="Creates a new record")
 def save(words, filename):
     if filename:
@@ -123,6 +123,14 @@ def save(words, filename):
         else:
             content_ = " ".join(words)
     print(client.save(content_))
+
+
+@click.option('--id', 'id_', required=True, type=str, help="Record ID to be updated")
+@cli.command(help="Updates an existing record")
+def edit(id_):
+    existing = client.fetch_by_id(id_)
+    content_ = prompt(">", vi_mode=True, multiline=True, default=existing['raw'])
+    print(client.update(id_, content_))
 
 
 @click.option('-n', '--days', type=int)
