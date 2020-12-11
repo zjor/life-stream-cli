@@ -151,3 +151,16 @@ def whoami():
     credentials = load_credentials()
     email = credentials.email if credentials else "not authorized"
     print(f"Profile: {active_profile}\nEndpoint: {endpoint}\nEmail: {email}")
+
+
+@cli.command(help="Shows statistics by tags")
+def stats():
+    stats_ = client.stats().items()
+    stats_ = sorted(stats_, key=lambda item: item[1], reverse=True)
+    if len(stats_) > 0:
+        print("[ Your tags statistics ]")
+        for item in stats_:
+            print(f"  - {colorize_tag(item[0])}: {item[1]}")
+        msg = colored(f"\nTotal: {len(stats_)} tags\n", color='grey', attrs=['dark'])
+        print(msg)
+
