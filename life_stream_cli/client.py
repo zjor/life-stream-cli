@@ -61,6 +61,14 @@ class Client:
             logging.warning(f"fetch: {response.status_code}")
             return None
 
+    def stats(self):
+        response = rq.get(f"{self.base_uri}/api/stats/tags", headers=self._get_headers())
+        if response.status_code == rq.codes.ok:
+            return response.json()
+        else:
+            logging.warning(f"stats: {response.status_code}")
+            return None
+
     def delete(self, id_):
         response = rq.delete(f"{self.base_uri}/api/stream/id/{id_}", headers=self._get_headers())
         if not response.status_code == rq.codes.ok:

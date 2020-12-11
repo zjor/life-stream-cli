@@ -96,7 +96,7 @@ def cli(ctx):
         search(["-n 7"])
 
 
-@cli.command()
+@cli.command(help="Sets local configurations")
 @click.option("--set", "set_name", required=False, type=str)
 @click.option("--get", "get_name", required=False, type=str)
 @click.option("--unset", "unset_name", required=False, type=str)
@@ -105,14 +105,14 @@ def config(set_name, get_name, unset_name, reset):
     config_command(set_name, get_name, unset_name, reset)
 
 
-@cli.command()
+@cli.command(help="Logs in to the current endpoint")
 def login():
     do_login(client)
 
 
 @click.argument('words', nargs=-1)
 @click.option('-f', '--filename')
-@cli.command()
+@cli.command(help="Creates a new record")
 def save(words, filename):
     if filename:
         with open(filename, "r") as f_:
@@ -128,7 +128,7 @@ def save(words, filename):
 @click.option('-n', '--days', type=int)
 @click.option('-t', '--tags', type=str)
 @click.option('--show-id', type=bool, default=False, is_flag=True)
-@cli.command()
+@cli.command(help="Searches for the records")
 def search(days: int, tags: str, show_id: bool):
     items = format_entries(client.fetch(days=days, tags=tags), show_id)
     for item in items.items():
@@ -138,13 +138,13 @@ def search(days: int, tags: str, show_id: bool):
 
 
 @click.argument("id_", nargs=1)
-@cli.command()
+@cli.command(help="Deletes a record by ID")
 def delete(id_: str):
     if client.delete(id_):
         print(f"Message {id_} was deleted")
 
 
-@cli.command()
+@cli.command(help="Prints current user's email and the selected endpoint")
 def whoami():
     active_profile = get_active_profile()
     endpoint = get_endpoint()
