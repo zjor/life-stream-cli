@@ -72,6 +72,15 @@ def format_entries(entries, show_id=False):
 
         prefix = "\n" if "\n" in entry["raw"] else " "
         line += f"{prefix}{entry['raw']}"
+
+        attrs = entry['attributes'] if 'attributes' in entry else None
+
+        if attrs and len(attrs) > 0:
+            line += "\n"
+            for k, v in attrs.items():
+                line += colored(f" {k}: {v} ", attrs=['reverse']) + " "
+            line += "\n"
+
         grouped[date].append(line)
 
     return grouped
