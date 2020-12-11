@@ -61,6 +61,14 @@ class Client:
             logging.warning(f"fetch: {response.status_code}")
             return None
 
+    def fetch_by_id(self, id_):
+        response = rq.get(f"{self.base_uri}/api/stream/id/{id_}", headers=self._get_headers())
+        if response.status_code == rq.codes.ok:
+            return response.json()
+        else:
+            logging.warning(f"fetch_by_id: {response.status_code}")
+            return None
+
     def stats(self):
         response = rq.get(f"{self.base_uri}/api/stats/tags", headers=self._get_headers())
         if response.status_code == rq.codes.ok:

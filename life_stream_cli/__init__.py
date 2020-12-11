@@ -127,14 +127,23 @@ def save(words, filename):
 
 @click.option('-n', '--days', type=int)
 @click.option('-t', '--tags', type=str)
-@click.option('--show-id', type=bool, default=False, is_flag=True)
+@click.option('--show-id', type=bool, default=False, is_flag=True, help="Display record IDs")
+@click.option('--id', 'id_', type=str, help="Find a single record by ID")
 @cli.command(help="Searches for the records")
-def search(days: int, tags: str, show_id: bool):
-    items = format_entries(client.fetch(days=days, tags=tags), show_id)
+def search(days: int, tags: str, show_id: bool, id_: str):
+    if id_:
+        items = [client.fetch_by_id(id_)]
+    else:
+        items = client.fetch(days=days, tags=tags)
+
+    items = format_entries(items, show_id)
     for item in items.items():
         print(f"[{colored(item[0], 'blue', attrs=['bold'])}]")
         for line in item[1]:
             print(f"  {line}")
+
+    msg = colored(f"\nTotal: {len(items)} records\n", color='grey', attrs=['dark'])
+    print(msg)
 
 
 @click.argument("id_", nargs=1)
@@ -163,4 +172,3 @@ def stats():
             print(f"  - {colorize_tag(item[0])}: {item[1]}")
         msg = colored(f"\nTotal: {len(stats_)} tags\n", color='grey', attrs=['dark'])
         print(msg)
-
