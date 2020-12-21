@@ -141,7 +141,7 @@ def save(words, filename, date_):
     print(client.save(content_, created_at))
 
 
-@click.option('--id', 'id_', required=True, type=str, help="Record ID to be updated")
+@click.argument("id_", nargs=1)
 @cli.command(help="Updates an existing record")
 def edit(id_):
     existing = client.fetch_by_id(id_)
@@ -149,12 +149,13 @@ def edit(id_):
     print(client.update(id_, content_))
 
 
-@click.option('-n', '--days', type=int)
-@click.option('-t', '--tags', type=str)
+@click.option('-n', '--days', type=int, help="n days back in the past")
+@click.option('-t', '--tags', type=str, help="Tags in the format tag1,tag2 without hashes")
+@click.option('-k', '--keys', type=str, help="Keys in the format key1:value1,key2:value2")
 @click.option('--show-id', type=bool, default=False, is_flag=True, help="Display record IDs")
 @click.option('--id', 'id_', type=str, help="Find a single record by ID")
 @cli.command(help="Searches for the records")
-def search(days: int, tags: str, show_id: bool, id_: str):
+def search(days: int, tags: str, keys: str, show_id: bool, id_: str):
     if id_:
         items = [client.fetch_by_id(id_)]
     else:
@@ -166,7 +167,7 @@ def search(days: int, tags: str, show_id: bool, id_: str):
         for line in item[1]:
             print(f"  {line}")
 
-    msg = colored(f"\nTotal: {len(items)} records\n", color='grey', attrs=['dark'])
+    msg = colored(f"\nTotal: {len(items)} records\n", color='grey')
     print(msg)
 
 
