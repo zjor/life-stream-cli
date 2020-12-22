@@ -18,23 +18,15 @@ colorama.init()
 
 logging.basicConfig(level=logging.INFO)
 
-REMOTE_HOST = "http://api.lifestream.176.102.64.189.xip.io"
-LOCAL_HOST = "http://localhost:8080"
 
-host = REMOTE_HOST
-
-
-# host = LOCAL_HOST
-
-
-def do_login(client) -> bool:
+def do_login(client_) -> bool:
     print("Please login or register first")
     email = input("Email: ")
     password = getpass.getpass()
-    shard_id = client.login(email, password)
+    shard_id = client_.login(email, password)
     if not shard_id:
         print("Seems you don't have an account, registering...")
-        shard_id = client.register(email, password)
+        shard_id = client_.register(email, password)
         if not shard_id:
             print("Something terribly wrong happened, exiting")
             return False
