@@ -159,7 +159,9 @@ def search(days: int, tags: str, keys: str, show_id: bool, id_: str):
     if id_:
         items = [client.fetch_by_id(id_)]
     else:
-        items = client.fetch(days=days, tags=tags)
+        items = client.fetch(days=days, tags=tags, keys=keys)
+
+    total = len(items)
 
     items = format_entries(items, show_id)
     for item in items.items():
@@ -167,7 +169,7 @@ def search(days: int, tags: str, keys: str, show_id: bool, id_: str):
         for line in item[1]:
             print(f"  {line}")
 
-    msg = colored(f"\nTotal: {len(items)} records\n", color='grey')
+    msg = colored(f"\nTotal: {total} records\n", color='grey')
     print(msg)
 
 

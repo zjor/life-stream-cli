@@ -54,7 +54,7 @@ class Client:
             json={"payload": message})
         return response.json()
 
-    def fetch(self, days=-1, tags=None):
+    def fetch(self, days: int = -1, tags: str = None, keys: str = None):
         args = ""
         if days and days > -1:
             after_millis = int((dt.datetime.now().timestamp() - days * 24 * 3600) * 1000)
@@ -63,6 +63,10 @@ class Client:
         if tags:
             tags = tags.split(",")
             args += "&" + "&".join(map(lambda x: f"tags={x}", tags))
+
+        if keys:
+            keys = keys.split(",")
+            args += "&" + "&".join(map(lambda x: f"attrs={x}", keys))
 
         response = rq.get(f"{self.base_uri}/api/stream?{args}", headers=self._get_headers())
         if response.status_code == rq.codes.ok:
