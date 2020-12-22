@@ -3,6 +3,7 @@ import datetime as dt
 import getpass
 import logging
 import colorama
+import pkg_resources
 from collections import defaultdict
 from termcolor import colored
 from prompt_toolkit import prompt
@@ -13,6 +14,8 @@ from life_stream_cli.config import Config
 from life_stream_cli.subcommands.config import config_command
 from life_stream_cli.subcommands.config.config_utils import get_endpoint, get_active_profile
 from life_stream_cli.subcommands.config.credentials_utils import load_credentials, store_credentials, Credentials
+
+__version__ = pkg_resources.get_distribution('life-stream-cli').version
 
 colorama.init()
 
@@ -81,9 +84,14 @@ def format_entries(entries, show_id=False):
 client = Client(get_endpoint(), None)
 
 
+@click.option("--version", is_flag=True)
 @click.group(invoke_without_command=True)
 @click.pass_context
-def cli(ctx):
+def cli(ctx, version: bool):
+    if version:
+        print(__version__)
+        return
+
     global client
     endpoint = get_endpoint()
     credentials = load_credentials()
@@ -161,7 +169,7 @@ def search(days: int, tags: str, keys: str, show_id: bool, id_: str):
         for line in item[1]:
             print(f"  {line}")
 
-    msg = colored(f"\nTotal: {total} records\n", color='grey')
+    msg = colored(f"\nTotal: {total} records\n", color='green')
     print(msg)
 
 
@@ -189,5 +197,5 @@ def stats():
         print("[ Your tags statistics ]")
         for item in stats_:
             print(f"  - {colorize_tag(item[0])}: {item[1]}")
-        msg = colored(f"\nTotal: {len(stats_)} tags\n", color='grey', attrs=['dark'])
+        msg = colored(f"\nTotal: {len(stats_)} tags\n", color='green')
         print(msg)

@@ -73,7 +73,7 @@ class Client:
             return response.json()
         else:
             logging.warning(f"fetch: {response.status_code}")
-            return None
+            return []
 
     def fetch_by_id(self, id_):
         response = rq.get(f"{self.base_uri}/api/stream/id/{id_}", headers=self._get_headers())
