@@ -174,6 +174,13 @@ def search(days: int, tags: str, keys: str, show_id: bool, id_: str):
 
 
 @click.argument("id_", nargs=1)
+@cli.command(help="Publishes a record")
+def publish(id_: str):
+    if client.publish(id_):
+        print(f"Message {id_} is now public")
+
+
+@click.argument("id_", nargs=1)
 @cli.command(help="Deletes a record by ID")
 def delete(id_: str):
     if client.delete(id_):

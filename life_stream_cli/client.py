@@ -47,6 +47,12 @@ class Client:
             })
         return response.json()
 
+    def publish(self, id_):
+        response = rq.post(
+            f"{self.base_uri}/api/stream/id/{id_}/publish",
+            headers=self._get_headers())
+        return response.json()
+
     def update(self, id_, message):
         response = rq.post(
             f"{self.base_uri}/api/stream/id/{id_}",
