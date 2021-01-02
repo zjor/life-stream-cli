@@ -29,7 +29,8 @@ def do_login(client_) -> bool:
     shard_id = client_.login(email, password)
     if not shard_id:
         print("Seems you don't have an account, registering...")
-        shard_id = client_.register(email, password)
+        username = input("Username (alphanumeric, no spaces): ")
+        shard_id = client_.register(username, email, password)
         if not shard_id:
             print("Something terribly wrong happened, exiting")
             return False

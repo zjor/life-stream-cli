@@ -24,14 +24,16 @@ class Client:
             logging.warning(f"{response.status_code}")
             return None
 
-    def register(self, email, password) -> Optional[str]:
+    def register(self, username, email, password) -> Optional[str]:
         response = rq.post(f"{self.base_uri}/api/auth/register", json={
+            "username": username,
             "email": email,
             "password": password
         })
         if response.status_code == rq.codes.ok:
             return response.json()["shardId"]
         else:
+            logging.warning(f"{response.status_code}")
             return None
 
     def _get_headers(self):
