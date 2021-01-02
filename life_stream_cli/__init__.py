@@ -78,8 +78,12 @@ def format_entries(entries, show_id=False):
             line += "\n"
 
         grouped[date].append(line)
-
     return grouped
+
+
+def print_dict(data: dict) -> None:
+    for k, v in data.items():
+        print(f"{colored(k, attrs=['bold'])}: {v if v else ''}")
 
 
 client = Client(get_endpoint(), None)
@@ -120,6 +124,17 @@ def login():
     do_login(client)
 
 
+@cli.command(help="Gets or updates user profile")
+@click.option("--set-username", "username", help="Sets username (alphanumeric, no space)")
+def profile(username: str):
+    if username:
+        res = client.update_profile(fields={"username": username})
+    else:
+        res = client.get_profile()
+    if res:
+        print_dict(res)
+
+
 @click.argument('words', nargs=-1)
 @click.option('-f', '--filename', help="Takes record content from the file")
 @click.option('--date', 'date_', type=str, help="Specifies creation date in format YYYY-mm-dd")
@@ -139,7 +154,7 @@ def save(words, filename, date_):
         created_at = int((dt.datetime.strptime(date_, "%Y-%m-%d") - dt.datetime.utcfromtimestamp(0))
                          .total_seconds() * 1000)
 
-    print(client.save(content_, created_at))
+    print_dict(client.save(content_, created_at))
 
 
 @click.argument("id_", nargs=1)
@@ -147,7 +162,7 @@ def save(words, filename, date_):
 def edit(id_):
     existing = client.fetch_by_id(id_)
     content_ = prompt(">", vi_mode=True, multiline=True, default=existing['raw'])
-    print(client.update(id_, content_))
+    print_dict(client.update(id_, content_))
 
 
 @click.option('-n', '--days', type=int, help="n days back in the past")

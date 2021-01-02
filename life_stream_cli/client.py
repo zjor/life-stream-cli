@@ -36,6 +36,23 @@ class Client:
             logging.warning(f"{response.status_code}")
             return None
 
+    def get_profile(self) -> dict:
+        response = rq.get(f"{self.base_uri}/api/user", headers=self._get_headers())
+        return response.json()
+
+    def update_profile(self, fields: dict) -> Optional[dict]:
+        response = rq.post(
+            f"{self.base_uri}/api/user",
+            headers=self._get_headers(),
+            json=fields)
+        json = response.json()
+        if response.status_code == rq.codes.ok:
+            return json
+        elif response.status_code == 400:
+            logging.info(f"code: {json['code']}; message: {json['message']}")
+        else:
+            logging.warning(f"{response.status_code}")
+
     def _get_headers(self):
         return {"X-ShardId": self.shard_id}
 
