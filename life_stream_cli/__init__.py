@@ -140,12 +140,14 @@ def profile(username: str):
 @click.option('--date', 'date_', type=str, help="Specifies creation date in format YYYY-mm-dd")
 @cli.command(help="Creates a new record")
 def save(words, filename, date_):
+    should_publish = False
     if filename:
         with open(filename, "r") as f_:
             content_ = f_.read().strip()
     else:
         if not words:
             content_ = prompt("> ", vi_mode=True, multiline=True)
+            should_publish = prompt("Make public?[y/N]: ").lower() == "y"
         else:
             content_ = " ".join(words)
 
@@ -154,7 +156,7 @@ def save(words, filename, date_):
         created_at = int((dt.datetime.strptime(date_, "%Y-%m-%d") - dt.datetime.utcfromtimestamp(0))
                          .total_seconds() * 1000)
 
-    print_dict(client.save(content_, created_at))
+    print_dict(client.save(content_, created_at, published=should_publish))
 
 
 @click.argument("id_", nargs=1)

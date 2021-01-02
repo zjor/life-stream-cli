@@ -56,13 +56,14 @@ class Client:
     def _get_headers(self):
         return {"X-ShardId": self.shard_id}
 
-    def save(self, message, created_at=None):
+    def save(self, message, created_at=None, published=False):
         response = rq.post(
             f"{self.base_uri}/api/stream",
             headers=self._get_headers(),
             json={
                 "payload": message,
-                "createdAt": created_at
+                "createdAt": created_at,
+                "published": published
             })
         return response.json()
 
