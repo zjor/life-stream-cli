@@ -124,6 +124,33 @@ def login():
     do_login(client)
 
 
+@cli.command(help="Change password or reset if lost")
+@click.option("--reset", "reset", is_flag=True, help="Resets password")
+def passwd(reset):
+    if reset:
+        email = prompt("Enter email: ")
+        code = prompt("Enter password reset code from the email or leave empty to get one: ")
+        if len(code) == 0:
+            client.request_password_reset(email)
+            print("Reset code have been sent. Repeat this command when received")
+        else:
+            password = prompt("Enter new password: ", is_password=True)
+            confirm_password = prompt("Confirm password: ", is_password=True)
+            if len(password) < 6 or password != confirm_password:
+                print("Passwords don't match or less then 6 characters")
+                return
+            client.reset_password(email, code, password)
+            print("Password has been set, please login")
+    else:
+        password = prompt("Enter new password: ", is_password=True)
+        confirm_password = prompt("Confirm password: ", is_password=True)
+        if len(password) < 6 or password != confirm_password:
+            print("Passwords don't match or less then 6 characters")
+            return
+        client.change_password(password)
+        print("Password has been set, please login")
+
+
 @cli.command(help="Gets or updates user profile")
 @click.option("--set-username", "username", help="Sets username (alphanumeric, no space)")
 def profile(username: str):

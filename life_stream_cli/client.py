@@ -36,6 +36,41 @@ class Client:
             logging.warning(f"{response.status_code}")
             return None
 
+    def request_password_reset(self, email):
+        response = rq.post(f"{self.base_uri}/api/auth/password/requestReset", json={
+            "email": email,
+        })
+        if response.status_code == rq.codes.ok:
+            return True
+        else:
+            logging.warning(f"{response.status_code}")
+            return False
+
+    def reset_password(self, email, code, password):
+        response = rq.post(f"{self.base_uri}/api/auth/password/reset", json={
+            "email": email,
+            "code": code,
+            "password": password
+        })
+        if response.status_code == rq.codes.ok:
+            return response.json()["shardId"]
+        else:
+            logging.warning(f"{response.status_code}")
+            return None
+
+    def change_password(self, password: str):
+        response = rq.post(
+            f"{self.base_uri}/api/user/password",
+            headers=self._get_headers(),
+            json={
+                "password": password
+            })
+        json = response.json()
+        if response.status_code == rq.codes.ok:
+            return json
+        else:
+            logging.warning(f"{response.status_code}")
+
     def get_profile(self) -> dict:
         response = rq.get(f"{self.base_uri}/api/user", headers=self._get_headers())
         return response.json()
