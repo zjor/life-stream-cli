@@ -10,7 +10,7 @@ default_config = {
         "active-profile": "default",
         "profiles": {
             "default": {
-                "endpoint": "http://api.lifestream.176.102.64.189.xip.io"
+                "endpoint": "http://api.lifestreamapp.xyz"
             },
             "local": {
                 "endpoint": "http://localhost:8080"
